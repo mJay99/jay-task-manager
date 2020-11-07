@@ -6,16 +6,16 @@ import { ListTasksComponent } from './task-manager/list-tasks/list-tasks.compone
 
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
+  { path: '', redirectTo: 'dashboard' , pathMatch:"full" },
   // { path: 'login', component: DefaultLoginComponent },
 
   {
     path: 'dashboard', component: DashboardComponent,
     canActivate: [],
     children: [
-      { path: '', component: BoardsComponent },
-      { path: 'boards', component: BoardsComponent },
+      { path: '',   redirectTo: 'tasks',pathMatch:"full" },
       { path: 'tasks', component: ListTasksComponent },
+      { path: 'boards', component: BoardsComponent },
      
     ]
   },
