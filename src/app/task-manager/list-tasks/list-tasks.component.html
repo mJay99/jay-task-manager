@@ -43,7 +43,7 @@
                     <div *ngIf="isAdd || isEdit">
                         <hr>
                         <app-create-update-task [isEdit]="isEdit" [taskToEdit]="taskToEdit"
-                            (relaodTasks)="getAllTasks()" (close)="close()">
+                            (relaodTasks)="getTasksAndUsers()" (close)="close()">
                         </app-create-update-task>
                     </div>
                 </ng-container>
@@ -106,15 +106,13 @@
                             title="{{task.priority |taskPriority}}">{{task.priority ? (task.priority |taskPriority) : 'N/A'}}</span>
                     </div>
                     <div class="col-2 ">
-                        <ng-container *ngIf="task && assignedUser">
                             <div class="cursor-pointer d-flex  justify-content-start ml-2">
                                 <span class="pt-2 mr-2 truncate-overflow-text" title="{{task.assigned_name}}">{{task.assigned_name ? (task.assigned_name|slice:0:10):'N/A'}}</span>
-                                <ng-container *ngIf="task.assigned_to && assignedUser[task.assigned_to].picture">
+                                <div *ngIf="task.assigned_to && task.assigned_to !== 'false' && checkAssignedUser">
                                     <img class="rounded-circle list-avatar" title="{{task.assigned_name}}"
-                                    [src]="assignedUser[task.assigned_to].picture">
-                                </ng-container>
+                                    src="{{assignedUser[task.assigned_to].picture}}">
+                                </div>
                             </div>
-                        </ng-container>
                     </div>
                     <div class="col-1 d-flex truncate-overflow-text">
                         <span class="cursor-pointer d-flex flex-fill justify-content-end"  [ngClass]="{'disabled': isEdit}" title="Edit task"

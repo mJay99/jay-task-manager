@@ -6,6 +6,9 @@ import { AlertService, UserService } from 'src/app/core/services';
 import { TaskService } from 'src/app/core/services/task/task.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { LoaderService } from 'src/app/core/services/loader/loader.service';
+import { forkJoin, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-tasks',
@@ -26,21 +29,24 @@ export class ListTasksComponent implements OnInit {
   public closeResult: any;
   public active_user_role: string;
   constructor(private taskService: TaskService,
-    private modalService: NgbModal,
-    private userService: UserService,
-    private alertService : AlertService,
-    private loaderService : LoaderService,) { }
+    private alertService: AlertService,
+    private loaderService: LoaderService,
+    private http: HttpClient) { }
 
   ngOnInit() {
     var self = this;
-    self.getAllUsers();
-    self.getAllTasks();
+    self.getTasksAndUsers()
   }
 
-  createTask(content?: any) {
+  createTask() {
     var self = this;
     self.isAdd = !self.isAdd;
   }
+
+  public get checkAssignedUser() {
+    return Object.keys(this.assignedUser).length > 0
+  }
+
 
   drop(event: CdkDragDrop<string[]>) {
     console.log('Previous: ');
@@ -49,40 +55,10 @@ export class ListTasksComponent implements OnInit {
     console.log(event.container.data);
     const prevIndex = this.tasksList.findIndex((d) => d === event.item.data);
     // if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data,prevIndex, event.currentIndex);
-      this.tasksList = [...this.tasksList];
-      // event.container.data.splice(event.previousIndex, 1);
+    moveItemInArray(event.container.data, prevIndex, event.currentIndex);
+    this.tasksList = [...this.tasksList];
+    // event.container.data.splice(event.previousIndex, 1);
     // }
-    }
-  getAllTasks() {
-    var self = this;
-    self.isAdd = false;
-    self.isEdit = false;
-    self.loaderService.startLoader();
-    self.taskService.getAllTasksList().subscribe((response: any) => {
-      console.log(response);
-      self.loaderService.stopLoader();
-      self.tasksList = response.tasks;
-      setTimeout(() => {
-        if (self.usersList.length > 0) {
-          self.tasksList.forEach(task => {
-            this.usersList.forEach(user => {
-              if (user.id === task.assigned_to) {
-                this.assignedUser[task.assigned_to] = user
-              }
-            });
-            console.log(this.assignedUser);
-            self.loaderService.stopLoader();
-          })
-        }
-      }, 100);
-
-
-    }, (error) => {
-      console.log(error);
-      self.alertService.error(error.Message || JSON.stringify(error));
-      self.loaderService.stopLoader();
-    })
   }
 
   getAssinedUser(id) {
@@ -93,29 +69,48 @@ export class ListTasksComponent implements OnInit {
     });
   }
 
-  getAllUsers() {
+  getTasksAndUsers() {
     var self = this;
+    self.isAdd = false;
+    self.isEdit = false;
+    let tasks = self.http.get(environment.baseUrl + 'list');
+    let users = self.http.get(environment.baseUrl + 'listusers');
     self.loaderService.startLoader();
-    self.userService.getAllUsersList().subscribe((response: any) => {
-      console.log(response);
-      self.usersList = response.users;
-      self.loaderService.stopLoader();
-    }, (error) => {
-      console.log(error);
-      self.alertService.error(error.Message || JSON.stringify(error));
-      self.loaderService.stopLoader();
+    forkJoin([tasks, users]).subscribe(
+      (data: any) => {
+        self.loaderService.stopLoader();
+        self.tasksList = data[0].tasks;
+        self.usersList = data[1].users;
+        self.setAssignedUser();
+
+      },
+      (error) => {
+        console.log(error);
+        self.alertService.error(error.Message || JSON.stringify(error));
+        self.loaderService.stopLoader();
+      })
+
+  }
+
+  setAssignedUser() {
+    var self = this;
+    self.tasksList.forEach(task => {
+      self.usersList.forEach(user => {
+        if (user.id === task.assigned_to) {
+          self.assignedUser[task.assigned_to] = user
+        }
+      });
     })
   }
 
-
   editTask(task: Task, index) {
     var self = this;
-    if(!self.hideByIndex){
+    if (!self.hideByIndex) {
       self.isEdit = !self.isEdit;
       self.taskToEdit = task;
       self.hideByIndex = index;
     }
-   
+
   }
 
   close() {
@@ -123,7 +118,6 @@ export class ListTasksComponent implements OnInit {
     self.isAdd = false;
     self.isEdit = false;
     self.hideByIndex = undefined;
-
   }
 
   deleteTask(task: Task) {
@@ -134,7 +128,7 @@ export class ListTasksComponent implements OnInit {
     self.taskService.deleteTask(data).subscribe((response: any) => {
       console.log(response);
       self.alertService.success('Task has been deleted successfully');
-      self.getAllTasks();
+      self.getTasksAndUsers();
       self.loaderService.stopLoader();
     }, (error) => {
       console.log(error);
