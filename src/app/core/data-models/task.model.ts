@@ -5,5 +5,5 @@ export class Task {
     message: string = EMPTY_STRING;
     priority: string = EMPTY_STRING;
     assigned_to: string;
-    due_date: string = EMPTY_STRING;
+    due_date: any = null;
 }

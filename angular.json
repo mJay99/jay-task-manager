@@ -30,7 +30,8 @@
             "styles": [
               "src/styles.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/font-awesome/css/font-awesome.min.css"
+              "./node_modules/font-awesome/css/font-awesome.min.css",
+              "./node_modules/bootstrap-datetime-picker/css/bootstrap-datetimepicker.min.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -40,7 +41,8 @@
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/popper.js/dist/umd/popper.min.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "./node_modules/bootstrap-datetime-picker/js/bootstrap-datetimepicker.min.js"
             ]
           },
           "configurations": {

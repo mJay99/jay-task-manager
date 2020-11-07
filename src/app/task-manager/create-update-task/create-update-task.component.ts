@@ -8,6 +8,7 @@ import { AlertService, UserService } from 'src/app/core/services';
 // import { CustomDateAdapter } from 'src/app/core/services/dateformat/custom-date-formater';
 // import { CustomDateParserFormatter } from 'src/app/core/services/dateformat/custom-date-parser';
 
+declare var  $ :any;
 @Component({
   selector: 'app-create-update-task',
   templateUrl: './create-update-task.component.html',
@@ -44,7 +45,8 @@ export class CreateUpdateTaskComponent implements OnInit {
     if(self.isEdit){
       self.task = self.taskToEdit;
     }
-    self.getAllUsers()
+    self.initializeCalender();
+    self.getAllUsers();
   }
 
   getAllUsers(){
@@ -85,12 +87,49 @@ private fetchMore() {
     }, 200)
 }
 
+  initializeCalender() {
+    let self = this;
+    let  dateToday;
+    let initialDate;
+    dateToday = new Date();
+    if(self.task.due_date){
+      // self.task.due_date = new Date(self.task.due_date.toString());
+      initialDate = new Date(self.task.due_date);
+    }else{
+      initialDate = dateToday;
+      // self.task.due_date = dateToday
+    }
+
+    $('#datetimepicker').datetimepicker({
+      format: "dd M yyyy - HH:ii P",
+      startDate: dateToday,
+      initialDate:initialDate,
+      showMeridian: true,
+      autoclose: true,
+      todayBtn: true
+    }).on('changeDate', (ev) => {
+      let self = this;
+      self.task.due_date = self.setCustomDateFormat(ev.date);
+      console.log(self.task.due_date);
+
+    });
+    if(self.isEdit){
+      $('#datetimepicker').datetimepicker('setDate',initialDate)
+    }
+
+
+  }
+setCustomDateFormat(rawDate){
+      var self = this;
+      let dPart = rawDate.toISOString().match(/\d{4}-\d{2}-\d{2}/)[0]
+      let tPart = rawDate.toISOString().match(/\d{2}:\d{2}:\d{2}/)[0]
+      return `${dPart} ${tPart}`
+}
 
 saveTask(){
   var self = this;
   var data = new FormData();
   let  task = {...self.task}
-  task.due_date = task.due_date + " 12:12:12";
   let keys = Object.keys(task);
 
   keys.forEach((key:string) => {
