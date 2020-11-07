@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Task } from 'src/app/core/data-models/task.model';
 import { User } from 'src/app/core/data-models/user.model';
-import { AlertService, UserService } from 'src/app/core/services';
+import { AlertService} from 'src/app/core/services';
 import { TaskService } from 'src/app/core/services/task/task.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { LoaderService } from 'src/app/core/services/loader/loader.service';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
+declare var  $ :any;
 
 @Component({
   selector: 'app-list-tasks',
@@ -22,6 +23,11 @@ export class ListTasksComponent implements OnInit {
   public usersList: User[] = [];
   assignedUser: any = {};
   public tasksList: Task[] = [];
+  public origanalTasksList: Task[] = [];
+  public origanalDoneList: Task[] = [];
+  public activeFilter:string = "0";
+  public doneList: Task[] = [];
+  public isActive:string = "All";
   public isAdd: boolean = false;
   public isEdit: boolean = false;
   public taskToEdit: Task;
@@ -35,12 +41,25 @@ export class ListTasksComponent implements OnInit {
 
   ngOnInit() {
     var self = this;
-    self.getTasksAndUsers()
+    self.getTasksAndUsers();
+    self.initializeCalender();
   }
 
   createTask() {
     var self = this;
     self.isAdd = !self.isAdd;
+  }
+
+  setActive() {
+    if (this.isActive === "In progress") {
+      this.isActive = "Done"
+    } else if (this.isActive === 'Done') {
+      this.isActive = "All";
+    }
+    else {
+      this.isActive = "In progress"
+    }
+
   }
 
   public get checkAssignedUser() {
@@ -49,17 +68,49 @@ export class ListTasksComponent implements OnInit {
 
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log('Previous: ');
-    // console.log(event.previousContainer.data);
-    console.log('Current: ');
     console.log(event.container.data);
+    const doneprevIndex = this.tasksList.findIndex((d) => d === event.item.data);
     const prevIndex = this.tasksList.findIndex((d) => d === event.item.data);
-    // if (event.previousContainer === event.container) {
-    moveItemInArray(event.container.data, prevIndex, event.currentIndex);
-    this.tasksList = [...this.tasksList];
-    // event.container.data.splice(event.previousIndex, 1);
-    // }
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, prevIndex, event.currentIndex);
+      this.tasksList = [...this.tasksList];
+    } else {
+      transferArrayItem(event.previousContainer.data, event.container.data, doneprevIndex, event.currentIndex);
+      this.doneList = [...this.doneList];
+      this.tasksList = [...this.tasksList];
+
+
+    }
+
   }
+
+  initializeCalender() {
+    let self = this;
+    let  dateToday;
+    let initialDate;
+    dateToday = new Date();
+    initialDate = dateToday;
+
+    $('.form_datetime').datetimepicker({
+      format: "dd M yyyy",
+      startDate: dateToday,
+      initialDate:initialDate,
+      showMeridian: true,
+      autoclose: true,
+      todayBtn: true
+    }).on('changeDate', (ev) => {
+      let self = this;
+      let dateParam = self.setCustomDateFormat(ev.date);
+      self.filterByDate(dateParam);
+
+    });
+    }
+setCustomDateFormat(rawDate){
+      var self = this;
+      let dPart = rawDate.toISOString().match(/\d{4}-\d{2}-\d{2}/)[0]
+      // let tPart = rawDate.toISOString().match(/\d{2}:\d{2}:\d{2}/)[0]
+      return `${dPart}`
+}
 
   getAssinedUser(id) {
     this.usersList.forEach(user => {
@@ -79,6 +130,7 @@ export class ListTasksComponent implements OnInit {
     forkJoin([tasks, users]).subscribe(
       (data: any) => {
         self.loaderService.stopLoader();
+        self.origanalTasksList = [...data[0].tasks]; 
         self.tasksList = data[0].tasks;
         self.usersList = data[1].users;
         self.setAssignedUser();
@@ -137,7 +189,38 @@ export class ListTasksComponent implements OnInit {
     })
   }
 
+  filterBy(filterByThis:string){
+   var self = this;
+   self.isActive = "In progress"
+   if(self.activeFilter === '0'){
+     self.activeFilter = filterByThis;
+       self.tasksList = self.origanalTasksList;
+       self.tasksList = self.tasksList.filter(task=>task.priority === filterByThis);
+   }
+   else{
+     self.activeFilter = "0";
+        self.tasksList = self.origanalTasksList;
+   }
+  }
+
+  filterByDate(filterByThis: any) {
+    var self = this;
+    self.activeFilter = filterByThis;
+    self.tasksList = self.origanalTasksList;
+    self.tasksList = self.tasksList.filter((task: Task) => {
+      if (task.due_date) {
+        let rawDate = new Date(task.due_date);
+        let date = self.setCustomDateFormat(rawDate)
+        return date == filterByThis
+      }
+    })
+
+  }
+
+
   clearFilterResult() {
     var self = this;
+      self.activeFilter = "0";
+      self.tasksList = self.origanalTasksList;
   }
 }

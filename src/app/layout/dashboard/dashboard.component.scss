@@ -1,5 +1,7 @@
+@import "_variables";
+
 .container-fluid{
-    background: #6699cc;
+    background: $bodyBgColor;
     width: 100% !important;
     // height: 100% !important;
     margin: 0rem !important;

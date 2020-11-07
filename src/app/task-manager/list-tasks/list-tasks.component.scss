@@ -14,11 +14,13 @@
     border: solid 1px #ccc;
     min-height: 60px;
     display: block;
-    background: white;
+    background: transparent;
     border-radius: 4px;
     overflow: hidden;
 }
-
+.btn .list-head{
+    background-color: none !important;
+}
 .action-card {
     margin: 15px 5px 0px 5px;
     overflow: visible;
@@ -164,11 +166,24 @@
     color: #007bff;
  }
 
+ .cal-icon{
+   margin-left: 10px;
+ }
 
+ .clear-icon{
+    margin-left: -30px;
+  }
   .fa-smile-o{
+    font-size: 10rem;
+  }
+  .task-check{
     font-size: 10rem;
   }
   .no-tasks-label{
     font-size: 24px;
     font-weight: 700;
+  }
+  .sub-label{
+    font-size: 16px;
+    font-weight: 400;
   }
