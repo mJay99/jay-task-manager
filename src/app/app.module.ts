@@ -9,7 +9,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { ErrorInterceptor } from './core/interceptor/error.interceptor';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from './shared/shared.module';
@@ -21,10 +20,8 @@ import { SharedModule } from './shared/shared.module';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    NgbModule,
     NgSelectModule,
     LayoutModule,
     TaskManagerModule,
