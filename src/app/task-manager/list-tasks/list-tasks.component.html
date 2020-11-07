@@ -1,13 +1,13 @@
 <div class="container-fluid list-card">
     <div class="card action-card ">
-        <div class="card-body action-card-body ">
+        <div class="card-body action-card-body pb-3 pt-3">
             <form class="actionForm" #f="ngForm">
-                <div class="d-flex justify-content-between  p-0 mb-3">
+                <div class="d-flex justify-content-between">
                     <div class="flex-fill max1">
                         <!-- <div class="action-title  safety-primary-color truncate-overflow-text pr-2">
                             {{boardName ? boardName + ' Board' : ''}} </div> -->
                         <div class="action-title  safety-primary-color truncate-overflow-text pr-2">
-                        All Tasks    
+                            All Tasks
                         </div>
                     </div>
                     <div class="d-flex col-5">
@@ -15,7 +15,7 @@
                             <div class="d-flex input-group s-search-box">
                                 <div class="flex-fill">
                                     <input type="text" placeholder="Search..." name="search_name"
-                                        [(ngModel)]="searchText"  #search_name="ngModel" />
+                                        [(ngModel)]="searchText" #search_name="ngModel" />
                                 </div>
                                 <!-- <span class="input-group-btn">
                                     <button class="btn" type="button" title="Search">
@@ -29,34 +29,38 @@
                                 </span> -->
                             </div>
                         </div>
-                        </div>
-                        <div class="d-flex ">
-                            <div class="ml-1 action-btn-class">
-                                <div class="ml-2 action-btn-class">
-                                    <button type="button" (click)="createTask()" class="btn  btn-outline-primary">Create New Task</button>
-                                </div>
-                        
+                    </div>
+                    <div class="d-flex ">
+                        <div class="ml-1 action-btn-class">
+                            <div class="ml-2 action-btn-class">
+                                <button type="button" (click)="createTask()" class="btn  btn-primary">Create New Task</button>
                             </div>
+
                         </div>
+                    </div>
                 </div>
-                <ng-container >
+                <ng-container>
                     <div *ngIf="isAdd || isEdit">
                         <hr>
-                        <app-create-update-task [isEdit] = "isEdit" [taskToEdit]="taskToEdit" (relaodTasks) ="getAllTasks()" (close)="close()">
+                        <app-create-update-task [isEdit]="isEdit" [taskToEdit]="taskToEdit"
+                            (relaodTasks)="getAllTasks()" (close)="close()">
                         </app-create-update-task>
                     </div>
                 </ng-container>
             </form>
         </div>
     </div>
-   
-    <ng-container *ngIf="tasksList && tasksList.length > 0" >
-        <div  class="mt-2 mb-2 d-flex col-head-row">
+
+    <ng-container *ngIf="tasksList && tasksList.length > 0">
+        <div class="mt-2 mb-2 d-flex col-head-row">
             <div class="col-1 truncate-overflow-text col-cell-head-p">
                 <span class="name" title="Task"></span>
             </div>
-            <div class="col-5 truncate-overflow-text col-cell-head-p">
+            <div class="col-3 truncate-overflow-text col-cell-head-p">
                 <span class="name" title="Task">Task</span>
+            </div>
+            <div class="col-2 truncate-overflow-text col-cell-head-p">
+                <span class="name" title="Created on">Created on </span>
             </div>
             <div class="col-2 truncate-overflow-text col-cell-head-p">
                 <span class="name" title="Due on">Due on </span>
@@ -64,57 +68,71 @@
             <div class="col-1 truncate-overflow-text col-cell-head-p">
                 <span class="name" title="Priority">Priority</span>
             </div>
-            <div class="col-1 truncate-overflow-text col-cell-head-p">
+            <div class="col-2 truncate-overflow-text col-cell-head-p">
                 <span class="name" title="Asssigned to">Asssigned to</span>
             </div>
-            <div class="col-2 truncate-overflow-text col-cell-head-p">
+            <div class="col-1 truncate-overflow-text col-cell-head-p">
                 <span class="d-flex justify-content-end pr-2" title="Modified At">Action</span>
             </div>
         </div>
-    <div class="mb-2 list-card-items" #todoList="cdkDropList" cdkDropList   [cdkDropListData]="tasksList" (cdkDropListDropped)="drop($event)">
+        <div class="mb-2 list-card-items" #todoList="cdkDropList" cdkDropList [cdkDropListData]="tasksList"
+            (cdkDropListDropped)="drop($event)">
             <div *ngFor="let task of tasksList | searchByAll:{message: searchText, due_date:searchText,  priority: searchText}; let i=index"
-            [hidden] ="hideByIndex===i"  class="list-card-item" [cdkDragData]="task" cdkDrag>
-            <div class="example-custom-placeholder"></div>
-                <div class="row col-data-row align-items-center " >
+                [hidden]="hideByIndex===i" class="list-card-item" [cdkDragData]="task" cdkDrag>
+                <div class="example-custom-placeholder"></div>
+                <div class="row col-data-row align-items-center ">
                     <div class="col-1  truncate-overflow-text">
-                        <i class="cursor-move pl-2 pr-2 fa fa-bars" cdkDragHandle title="Drag"></i>
+                        <i class="cursor-move pl-2 pr-2 fa fa-bars" title="Drag"></i>
                         <label class="form-check-label pl-2">
-                            <input type="checkbox"  name="task{{i}}" id="task{{i}}"
-                               [checked]="false">
-                          </label>
+                            <input type="checkbox" name="task{{i}}" id="task{{i}}" [checked]="false">
+                        </label>
                     </div>
-                    <div class="col-5  truncate-overflow-text">
-                        <span class="name" title="{{task.message}}">{{task.message}}</span>
+                    <div class="col-3  truncate-overflow-text">
+                        <span class="name" title="{{task.message}}">{{task.message || 'N/A'}}</span>
                     </div>
                     <div class="col-2 truncate-overflow-text">
-                        <span class="name" title="{{task.due_date}}">{{task.due_date}}</span>
+                        <span class="name" title="{{task.created_on  | date:'EE MMM d, y, h:mm a'}}">
+                            {{task.created_on ? (task.created_on  | date:'EE MMM d, y, h:mm a') : 'N/A'}}
+                        </span>
+                    </div>
+                    <div class="col-2 truncate-overflow-text">
+                        <span class="name" title="{{task.due_date | date:'EE MMM d, y, h:mm a'}}">
+                            {{task.due_date ? (task.due_date | date:'EE MMM d, y, h:mm a') : 'N/A'}}
+                        </span>
                     </div>
                     <div class="col-1 truncate-overflow-text">
-                        <span class="badge badge-pill" [ngClass]="{'badge-warning': task.priority === '2','badge-info': task.priority === '1','badge-danger': task.priority === '3'}" 
-                        title="{{task.priority |taskPriority}}">{{task.priority |taskPriority}}</span>
+                        <span class="badge badge-pill"
+                            [ngClass]="{'badge-warning': task.priority === '2','badge-info': task.priority === '1','badge-danger': task.priority === '3'}"
+                            title="{{task.priority |taskPriority}}">{{task.priority ? (task.priority |taskPriority) : 'N/A'}}</span>
                     </div>
-                    <div class="col-1 truncate-overflow-text" >
-                        <ng-container *ngIf="assignedUser">
-                            <div class="cursor-pointer d-flex flex-column justify-content-center ml-2">
-                                <img class="rounded-circle list-avatar" title="{{assignedUser[task.assigned_to].name}}" [src]="assignedUser[task.assigned_to].picture">
-                                <!-- <span class="pt-2" title="{{assignedUser[task.assigned_to].name}}">{{assignedUser[task.assigned_to].name}}</span> -->
+                    <div class="col-2 ">
+                        <ng-container *ngIf="task && assignedUser">
+                            <div class="cursor-pointer d-flex  justify-content-start ml-2">
+                                <span class="pt-2 mr-2 truncate-overflow-text" title="{{task.assigned_name}}">{{task.assigned_name ? (task.assigned_name|slice:0:10):'N/A'}}</span>
+                                <ng-container *ngIf="task.assigned_to && assignedUser[task.assigned_to].picture">
+                                    <img class="rounded-circle list-avatar" title="{{task.assigned_name}}"
+                                    [src]="assignedUser[task.assigned_to].picture">
+                                </ng-container>
                             </div>
                         </ng-container>
                     </div>
-                    <div class="col-2 d-flex truncate-overflow-text">
-                        <span class="cursor-pointer d-flex flex-fill justify-content-end" title="Edit task" (click)="editTask(task,i)">
-                        <i class="fa-2x fa fa-pencil pencil-icon-color" aria-hidden="true"></i>
+                    <div class="col-1 d-flex truncate-overflow-text">
+                        <span class="cursor-pointer d-flex flex-fill justify-content-end"  [ngClass]="{'disabled': isEdit}" title="Edit task"
+                            (click)="editTask(task,i)">
+                            <i class="fa-2x fa fa-pencil pencil-icon-color" aria-hidden="true"></i>
                         </span>
-                        <span class="cursor-pointer d-flex ml-3 pr-4 justify-content-end" title="Delete task" (click)="deleteTask(task)">
+                        <span class="cursor-pointer d-flex ml-3 pr-4 justify-content-end" title="Delete task"
+                            (click)="deleteTask(task)">
                             <i class="fa-2x fa fa-trash trash-icon-color" aria-hidden="true"></i>
                         </span>
                     </div>
-              
+
                 </div>
             </div>
         </div>
     </ng-container>
-    <div *ngIf="!tasksList || tasksList.length === 0" class="mb-2 mt-4 pt-4  d-flex flex-column align-items-center justify-content-center">
+    <div *ngIf="!tasksList || tasksList.length === 0"
+        class="mb-2 mt-4 pt-4  d-flex flex-column align-items-center justify-content-center">
         <!-- No Task to complete ! -->
         <i class="fa fa-smile-o" aria-hidden="true"></i>
         <div class="pt-1">

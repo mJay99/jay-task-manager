@@ -6,7 +6,6 @@ import { ListTasksComponent } from './list-tasks/list-tasks.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BoardsComponent } from './boards/boards.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PiorityPipe } from '../core/pipes/task-priority.pipe';
 import { SearchByAllPipe } from '../core/pipes/search-by-all.pipe';
@@ -19,8 +18,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   imports: [
     CommonModule,
     FormsModule,
-    FormsModule,
-    NgbModule,
     NgSelectModule,
     RouterModule,
     DragDropModule

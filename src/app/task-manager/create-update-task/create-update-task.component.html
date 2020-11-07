@@ -33,15 +33,14 @@
     </div>
     <div class="col-1 d-flex justify-content-end align-items-center">
       <div class="action-btn-class">
-        <button type="button" *ngIf="!isEdit" (click)="saveTask()" class="btn btn-outline-success">Save</button>
-        <button type="button" *ngIf="isEdit" (click)="updateTask()" class="btn btn-outline-success">Update</button>
+        <button type="button" *ngIf="!isEdit" (click)="saveTask()" class="btn btn-success">Save</button>
+        <button type="button" *ngIf="isEdit" (click)="updateTask()" class="btn btn-success">Update</button>
       </div>
     </div>
     <div class="col-1 d-flex justify-content-end align-items-center">
       <div class="action-btn-class">
-        <button type="button" (click)="cancel()" class="btn btn-outline-secondary">Cancel</button>
+        <button type="button" (click)="cancel()" class="btn btn-danger">Cancel</button>
       </div>
     </div>
     </div>
 </form>
-<pre>{{task | json}}</pre>

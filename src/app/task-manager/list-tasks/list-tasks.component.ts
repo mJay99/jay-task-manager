@@ -61,6 +61,7 @@ export class ListTasksComponent implements OnInit {
     self.loaderService.startLoader();
     self.taskService.getAllTasksList().subscribe((response: any) => {
       console.log(response);
+      self.loaderService.stopLoader();
       self.tasksList = response.tasks;
       setTimeout(() => {
         if (self.usersList.length > 0) {
@@ -109,9 +110,12 @@ export class ListTasksComponent implements OnInit {
 
   editTask(task: Task, index) {
     var self = this;
-    self.isEdit = !self.isEdit;
-    self.taskToEdit = task;
-    self.hideByIndex = index;
+    if(!self.hideByIndex){
+      self.isEdit = !self.isEdit;
+      self.taskToEdit = task;
+      self.hideByIndex = index;
+    }
+   
   }
 
   close() {

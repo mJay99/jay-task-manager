@@ -326,8 +326,8 @@ input:-webkit-autofill:active {
 }
 
 .disabled {
-    background: $bodyBgColor !important;
-    border: 1px solid $bglightGray !important;
+    // background: $bodyBgColor !important;
+    // border: 1px solid $bglightGray !important;
     pointer-events: none !important;
 }
 
