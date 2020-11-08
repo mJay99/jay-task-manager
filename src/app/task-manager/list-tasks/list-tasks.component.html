@@ -100,7 +100,7 @@
                 </div>
 
                     <div class="mb-2 list-card-items" id="taskList" class="collapse show" aria-labelledby="headingOne">
-                        <div *ngFor="let task of tasksList | searchByAll:{message: searchText, due_date:searchText,  priority: searchText}; let i=index"
+                        <div *ngFor="let task of tasksList | searchByAll:{message: searchText, due_date:searchText, priority:searchText , assigned_name: searchText}; let i=index"
                             [hidden]="hideByIndex===i" class="list-card-item cursor-move" [cdkDragData]="task" cdkDrag>
                             <div class="row col-data-row align-items-center ">
                                 <div class="col-1 pr-0 truncate-overflow-text">
