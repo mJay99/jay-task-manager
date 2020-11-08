@@ -2,7 +2,7 @@
     <div class="card action-card ">
         <div class="card-body action-card-body pb-3 pt-3">
             <form class="actionForm">
-                <div  [style.visibility]="(isEdit||isAdd)? 'hidden': 'visible'" class="d-flex justify-content-between">
+                <div *ngIf="!(isAdd||isEdit)" class="d-flex justify-content-between">
                     <div class="flex-fill max1">
                         <!-- <div class="action-title  safety-primary-color truncate-overflow-text pr-2">
                             {{boardName ? boardName + ' Board' : ''}} </div> -->
@@ -12,7 +12,7 @@
                     </div>
                         <div class="col-3 d-flex align-items-center justify-content-end  ml-1"  title="Filter by due date">
                           <input type="text" class="form-control date form_datetime"  placeholder="Filter by due date"  readonly> 
-                          <i class="cursor-pointer clear-icon fa fa-close mr-2" (click)="clearFilterResult()"></i>
+                          <i class="cursor-pointer clear-icon fa fa-close mr-2" title="Clear filter" (click)="clearFilterResult()"></i>
                         </div>
                     <div class="d-flex  justify-content-end">
                          <button type="button" (click)="setActive()" title="Toggle & pin task categories"

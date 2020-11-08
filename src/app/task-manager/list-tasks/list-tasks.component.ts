@@ -42,7 +42,11 @@ export class ListTasksComponent implements OnInit {
   ngOnInit() {
     var self = this;
     self.getTasksAndUsers();
-    self.initializeCalender();
+    if(!(self.isEdit || self.isAdd)){
+      setTimeout(() => {
+        self.initializeCalender();
+      }, 50);
+    }
   }
 
   createTask() {
@@ -90,7 +94,7 @@ export class ListTasksComponent implements OnInit {
     let initialDate;
     dateToday = new Date();
     initialDate = dateToday;
-
+    debugger
     $('.form_datetime').datetimepicker({
       format: "dd M yyyy",
       startDate: dateToday,
