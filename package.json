@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-jtm" : "ng build --prod --baseHref='https://mjay99.github.io/jay-task-manager/'"
+    "build-jtm": "ng build --prod --baseHref='https://mjay99.github.io/jay-task-manager/'",
+    "jtm-version": "npm --no-git-tag-version version"
   },
   "private": true,
   "dependencies": {
@@ -49,7 +50,7 @@
     "@angular/language-service": "^10.2.2",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^12.11.1",
+    "@types/node": "^12.19.3",
     "angular-cli-ghpages": "^0.6.2",
     "codelyzer": "^6.0.1",
     "jasmine-core": "~3.5.0",
