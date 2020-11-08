@@ -27,7 +27,8 @@
           <small class="form-text text-muted">Loaded {{users.length}} of {{users.length}}</small>
         </ng-template>
         <ng-template ng-option-tmp let-item="item" let-index="index">
-          <b>{{index}}</b> {{item.name}}
+          <img class="rounded-circle list-avatar assignee-opt-item assignee-option-pic mr-1" title="{{item.name}}"
+          src="{{item.picture}}"> {{item.name}}
         </ng-template>
       </ng-select>
     </div>
