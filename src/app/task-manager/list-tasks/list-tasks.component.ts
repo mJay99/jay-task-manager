@@ -21,12 +21,12 @@ export class ListTasksComponent implements OnInit {
   searchText: string = "";
   hideByIndex;
   public usersList: User[] = [];
-  assignedUser: any = {};
+  public assignedUser: any = {};
   public tasksList: Task[] = [];
   public origanalTasksList: Task[] = [];
   public origanalDoneList: Task[] = [];
-  public activeFilter:string = "0";
   public doneList: Task[] = [];
+  public activeFilter:string = "0";
   public isActive:string = "All";
   public isAdd: boolean = false;
   public isEdit: boolean = false;
@@ -67,12 +67,11 @@ export class ListTasksComponent implements OnInit {
   }
 
   public get checkAssignedUser() {
-    return Object.keys(this.assignedUser).length > 0
+    return Object.keys(this.assignedUser).length > 0;
   }
 
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log(event.container.data);
     const doneprevIndex = this.tasksList.findIndex((d) => d === event.item.data);
     const prevIndex = this.tasksList.findIndex((d) => d === event.item.data);
     if (event.previousContainer === event.container) {
@@ -82,19 +81,15 @@ export class ListTasksComponent implements OnInit {
       transferArrayItem(event.previousContainer.data, event.container.data, doneprevIndex, event.currentIndex);
       this.doneList = [...this.doneList];
       this.tasksList = [...this.tasksList];
-
-
     }
 
   }
 
   initializeCalender() {
     let self = this;
-    let  dateToday;
-    let initialDate;
+    let  dateToday,initialDate;
     dateToday = new Date();
     initialDate = dateToday;
-    debugger
     $('.form_datetime').datetimepicker({
       format: "dd M yyyy",
       startDate: dateToday,
@@ -138,7 +133,6 @@ setCustomDateFormat(rawDate){
         self.tasksList = data[0].tasks;
         self.usersList = data[1].users;
         self.setAssignedUser();
-
       },
       (error) => {
         console.log(error);
@@ -202,7 +196,7 @@ setCustomDateFormat(rawDate){
        self.tasksList = self.tasksList.filter(task=>task.priority === filterByThis);
    }
    else{
-     self.activeFilter = "0";
+       self.activeFilter = "0";
         self.tasksList = self.origanalTasksList;
    }
   }
@@ -220,7 +214,6 @@ setCustomDateFormat(rawDate){
     })
 
   }
-
 
   clearFilterResult() {
     var self = this;

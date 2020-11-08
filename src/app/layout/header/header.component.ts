@@ -13,7 +13,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-
   public navigateTo(route_name: string) {
     var self = this;
     self.router.navigate([route_name]);

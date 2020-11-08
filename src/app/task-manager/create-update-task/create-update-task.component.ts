@@ -1,27 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { NgbDateStruct, NgbModal, ModalDismissReasons, NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LoaderService } from 'src/app/core/services/loader/loader.service';
 import { Task } from 'src/app/core/data-models/task.model';
-import { HttpClient } from '@angular/common/http';
 import { TaskService } from 'src/app/core/services/task/task.service';
 import { AlertService, UserService } from 'src/app/core/services';
-// import { CustomDateAdapter } from 'src/app/core/services/dateformat/custom-date-formater';
-// import { CustomDateParserFormatter } from 'src/app/core/services/dateformat/custom-date-parser';
 
 declare var  $ :any;
 @Component({
   selector: 'app-create-update-task',
   templateUrl: './create-update-task.component.html',
   styleUrls: ['./create-update-task.component.scss'],
-  // providers: [{provide: NgbDateAdapter, useClass: CustomDateAdapter},
-  //   {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}]
 })
 export class CreateUpdateTaskComponent implements OnInit {
   public task: Task = new Task();
   public closeResult: any;
-  public model: NgbDateStruct;
 
-  constructor(private modalService: NgbModal, 
+  constructor(
     private taskService : TaskService,
     private userService : UserService,
     private alertService : AlertService,
@@ -89,15 +82,12 @@ private fetchMore() {
 
   initializeCalender() {
     let self = this;
-    let  dateToday;
-    let initialDate;
+    let  dateToday,initialDate;
     dateToday = new Date();
     if(self.task.due_date){
-      // self.task.due_date = new Date(self.task.due_date.toString());
       initialDate = new Date(self.task.due_date);
     }else{
       initialDate = dateToday;
-      // self.task.due_date = dateToday
     }
 
     $('#datetimepicker').datetimepicker({
@@ -171,7 +161,6 @@ updateTask(task:Task){
     self.relaodTasks.emit();
     self.close.emit()
     self.loaderService.stopLoader();
-    // self.users = response.users;
   }, (error) => {
     console.log(error);
     self.alertService.error(error.Message || JSON.stringify(error));
