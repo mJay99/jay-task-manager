@@ -1,6 +1,19 @@
-# TaskManager
+# Task Manager Project
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.29.
+
+## Steps to run 'TaskManager'.
+
+    1) Clone the project in any local folder.
+
+    2) cd TaskManager
+
+    3) Run `npm install` from 'TaskManager' in terminal. If it takes too much time or halts in between then press
+    `CTRL+ C` and again run `npm install`.
+
+    4) After successful installation, run `ng serve --open`.
+
+    After successfull execution of all the above steps , project will start in browser.
 
 ## Development server
 
