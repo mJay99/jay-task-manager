@@ -2,7 +2,7 @@
     <div class="card action-card ">
         <div class="card-body action-card-body pb-3 pt-3">
             <form class="actionForm">
-                <div  *ngIf="!(isEdit || isAdd)" class="d-flex justify-content-between">
+                <div  [style.visibility]="(isEdit||isAdd)? 'hidden': 'visible'" class="d-flex justify-content-between">
                     <div class="flex-fill max1">
                         <!-- <div class="action-title  safety-primary-color truncate-overflow-text pr-2">
                             {{boardName ? boardName + ' Board' : ''}} </div> -->
